@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.parsec.eridanus.dao.ChannelDao">
+    <update id="saveChannel" parameterType="com.parsec.eridanus.po.Channel">
+        UPDATE tbl_menu SET isEnable = 1 WHERE id = #{id}
+    </update>
+    <select id="findAllChannel" resultType="com.parsec.eridanus.po.Channel">
+        SELECT * FROM tbl_menu WHERE isEnable = 1
+    </select>
+</mapper>

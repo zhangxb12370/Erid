@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.parsec.eridanus.dao.CasesDao">
+
+    <insert id="add" parameterType="com.parsec.eridanus.po.Cases" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tbl_case
+        (logoUrl,redirectUrl,createTime,isDelete,caseName,details,orderNum)
+        VALUES
+        (#{logoUrl},#{redirectUrl},#{createTime},#{isDelete},#{caseName},#{details},#{orderNum})
+    </insert>
+    <update id="edit" parameterType="com.parsec.eridanus.po.Cases">
+        UPDATE tbl_case
+        <set>
+            <if test="logoUrl != null">
+                logoUrl = #{logoUrl},
+            </if>
+            <if test="redirectUrl != null">
+                redirectUrl = #{redirectUrl},
+            </if>
+            <if test="caseName !=null">
+                caseName = #{caseName},
+            </if>
+            <if test="details != null">
+                details = #{details},
+            </if>
+            <if test="orderNum != null">
+                orderNum = #{orderNum}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="delete" parameterType="java.lang.Integer">
+        UPDATE tbl_case SET isDelete = 0 , orderNum = 0 WHERE id = #{value}
+    </update>
+    <update id="updateOrderNum" parameterType="java.lang.Integer">
+        UPDATE tbl_case SET orderNum = orderNum -1 WHERE orderNum > #{delNum}
+    </update>
+    <select id="findAll" resultType="com.parsec.eridanus.po.Cases">
+        SELECT * FROM tbl_case WHERE isDelete = 1 ORDER BY createTime DESC
+    </select>
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.parsec.eridanus.po.Cases">
+        SELECT * FROM tbl_case WHERE isDelete = 1 AND id = #{value}
+    </select>
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tbl_case WHERE isDelete = 1
+    </select>
+    <select id="selectPagedList" parameterType="com.parsec.eridanus.po.Cases" resultType="com.parsec.eridanus.po.Cases">
+        SELECT * FROM tbl_case WHERE isDelete = 1 ORDER BY orderNum DESC
+        <![CDATA[
+                    limit #{fromRec},#{pageSize}
+                ]]>
+    </select>
+    <select id="getCount" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tbl_case WHERE isDelete = 1
+    </select>
+    <select id="selectAllCase" resultType="com.parsec.eridanus.po.Cases">
+        SELECT * FROM tbl_case WHERE orderNum >= #{orderNum}
+    </select>
+    <update id="modifyList" parameterType="java.util.List">
+        <foreach collection="list" item="cases" index="index" open="" close=""  separator=";">
+            UPDATE tbl_case
+            <set>
+                orderNum = #{cases.orderNum}
+            </set>
+            WHERE id = #{cases.id}
+        </foreach>
+    </update>
+</mapper>

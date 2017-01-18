@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery-1.11.3.min.js"></script>
+    <script>
+//        $.ajaxSetup({
+//            contentType: 'application/json; charset=utf-8'
+//        });
+
+
+        var data1 = {"username":"admin","password":"123456","randomCode":"123456","verificationCode":"2H9N"}
+        function login() {
+            $.ajax({
+                url:"http://localhost:8070/eridanus/public/login",
+                type:"post",
+                contentType:'application/json; charset=utf-8',
+                data:JSON.stringify(data1),
+                dataType:'json'
+            })
+        }
+
+        function delNews() {
+            $.ajax({
+                url:"http://localhost:8070/eridanus/admin/news/delete/1",
+                type:"delete"
+            })
+        }
+
+        function getNews() {
+            $.ajax({
+                url:"http://localhost:8070/eridanus/admin/news/1",
+                type:"get"
+            })
+        }
+
+        function uploadf() {
+            $.ajax({
+                url: 'http://localhost:8080/eridanus/admin/fileUpLoad',
+                type: 'POST',
+                cache: false,
+                data: new FormData($('#uploadForm')[0]),
+               processData: false,
+                contentType: false
+            }).done(function(res) {
+            }).fail(function(res) {});
+        }
+
+
+
+
+    </script>
+</head>
+<body>
+    <button type="button" onclick="login()">登录</button>
+    <form action="admin/fileUpLoad" method="post" enctype="multipart/form-data">
+        <input type="file" name="file"><br>
+        <input type="submit" value="上传">
+    </form>
+    <button type="button" onclick="delNews()">删除</button>
+    <button type="button" onclick="getNews()">查询</button>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input id="file" type="file" name="file"/>
+        <button onclick="uploadf()" type="button">upload</button>
+    </form>
+
+    <script>
+//            $.ajax({
+//                url: 'http://localhost:8080/eridanus/admin/fileUpLoad',
+//                type: 'POST',
+//                cache: false,
+//                data: new FormData($('#uploadForm')[0]),
+//                processData: false,
+//                contentType: false
+//            }).done(function(res) {
+//            }).fail(function(res) {});
+
+    </script>
+</body>
+</html>

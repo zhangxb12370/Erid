@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.parsec.eridanus.dao.ArticleDao">
+    <insert id="add" parameterType="com.parsec.eridanus.po.Article">
+        INSERT INTO
+        tbl_article(publishTime,updateTime,content,title,isDelete,subTitle,channelID)
+        VALUES (#{publishTime},#{updateTime},#{content},#{title},#{isDelete},#{subTitle},#{channelID})
+    </insert>
+    <update id="edit" parameterType="com.parsec.eridanus.po.Article">
+        UPDATE tbl_article
+        <set>
+            <if test="updateTime !=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="content !=null">
+                content = #{content},
+            </if>
+            <if test="title !=null">
+                title = #{title},
+            </if>
+            <if test="subTitle !=null">
+                subTitle = #{subTitle}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.parsec.eridanus.po.Article">
+        SELECT * FROM tbl_article
+        WHERE id = #{value} AND isDelete = 1
+    </select>
+    <select id="findAll" parameterType="java.lang.Integer" resultType="com.parsec.eridanus.po.Article">
+        SELECT * FROM tbl_article WHERE isDelete = 1 AND channelID = #{value} ORDER BY publishTime DESC
+    </select>
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM tbl_article WHERE isDelete = 1
+    </select>
+    <update id="delete" parameterType="java.lang.Integer">
+        UPDATE tbl_article SET isDelete = 0 WHERE id = #{value}
+    </update>
+</mapper>

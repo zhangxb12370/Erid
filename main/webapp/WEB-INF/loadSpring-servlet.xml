@@ -1,0 +1,51 @@
+<beans xmlns="http://www.springframework.org/schema/beans"    
+ xmlns:mvc="http://www.springframework.org/schema/mvc"  
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xsi:schemaLocation="http://www.springframework.org/schema/beans
+				     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd   
+				     http://www.springframework.org/schema/mvc  
+				     http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+				     http://www.springframework.org/schema/context  
+				     http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+				     
+	<!-- 启动包扫描功能，以便注册带有@Controller、@Service、@repository、@Component等注解的类成为spring的bean -->  
+	<context:component-scan base-package="com.parsec" >
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+	</context:component-scan>
+	
+	<!--  当你在controller中返回一个路径的时候，它又把路径当作一个请求被dispatcherServlet所拦截，为了防止请求加入如下配置  -->
+	<mvc:default-servlet-handler/>
+	
+	<!-- 启动注解驱动的Spring MVC功能，注册请求url和注解POJO类方法的映射-->  
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg type="java.nio.charset.Charset">
+					<value>UTF-8</value>
+				</constructor-arg>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	 
+	
+	<!-- 对内部视图转化器名称的解析，在请求时模型视图名称添加前后缀 -->  
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/" />
+	  	<property name="order" value="1" />
+	  	<property name="viewNames" value="redirect:*, forward:*, *.html" />
+	</bean>
+
+	<!-- 文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+    	<property name="maxUploadSize" value="10485760" />  
+    </bean>
+
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/admin/**"/>
+			<ref bean="validTokenMgr"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+</beans>  

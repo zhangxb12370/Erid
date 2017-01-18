@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.parsec.eridanus.dao.AdminDao">
+
+    <select id="getbyName" parameterType="java.lang.String" resultType="com.parsec.eridanus.po.Admin">
+        SELECT * from tbl_admin a WHERE a.loginName = #{value}
+    </select>
+    <insert id="addAdmin" parameterType="com.parsec.eridanus.po.Admin">
+        INSERT INTO tbl_admin(loginName,password,createTime,updateTime,adminName)VALUES (#{loginName},#{password},#{createTime},#{updateTime},#{adminName})
+    </insert>
+    <select id="findAll" resultType="com.parsec.eridanus.po.Admin">
+        SELECT * FROM tbl_admin
+    </select>
+    <update id="modifyPwd" parameterType="com.parsec.eridanus.po.Admin">
+        UPDATE tbl_admin
+        <set>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="adminName != null">
+                adminName = #{adminName}
+            </if>
+        </set>
+        WHERE loginName = #{loginName}
+    </update>
+</mapper>

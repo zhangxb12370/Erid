@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.parsec.eridanus.dao.SsMenuDao">
+    <!-- 根据id查询Person, 关联将Orders查询出来 -->
+    <select id="findAll"  resultType="com.parsec.eridanus.po.SsMenu">
+        SELECT * FROM tbl_menu WHERE isDelete = 1 AND parentId = 0
+    </select>
+  <insert id="add" parameterType="com.parsec.eridanus.po.SsMenu" useGeneratedKeys="true" keyProperty="id">
+      INSERT INTO tbl_menu(url,urlName,icon,parentId,isDelete) VALUES(#{url},#{urlName},#{icon},#{parentId},#{isDelete})
+  </insert>
+    <update id="edit" parameterType="com.parsec.eridanus.po.SsMenu">
+        UPDATE tbl_menu
+        <set>
+            <if test="url != null">
+                url = #{url},
+            </if>
+            <if test="urlName != null">
+                urlName = #{urlName}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <update id="delete" parameterType="java.lang.Integer">
+        UPDATE tbl_menu SET isDelete = 0 WHERE id = #{value}
+    </update>
+    <select id="getArticleById" parameterType="java.lang.Integer" resultType="com.parsec.eridanus.po.Article">
+        SELECT * FROM tbl_article WHERE channelId = #{value} and isDelete = 1
+    </select>
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.parsec.eridanus.po.SsMenu">
+        SELECT * FROM tbl_menu WHERE id = #{value}
+    </select>
+    <select id="getByUrlName" parameterType="java.lang.String" resultType="com.parsec.eridanus.po.SsMenu">
+        SELECT * FROM tbl_menu WHERE urlName = #{value} AND isDelete = 1
+    </select>
+</mapper>

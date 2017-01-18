@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.parsec.eridanus.dao.IndexDao">
+    <update id="edit" parameterType="com.parsec.eridanus.po.Index">
+        UPDATE tbl_index
+        <set>
+            <if test="imageUrl != null">
+                imageUrl = #{imageUrl},
+            </if>
+            <if test="redirectUrl != null">
+                redirectUrl = #{redirectUrl},
+            </if>
+            <if test="isEnable !=null ">
+                isEnable = #{isEnable},
+            </if>
+            <if test="updateTime !=null ">
+                updateTime = #{updateTime},
+            </if>
+            <if test="detail != null">
+                detail = #{detail}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <select id="findAll" resultType="com.parsec.eridanus.po.Index">
+        SELECT * from tbl_index WHERE isEnable = 1
+    </select>
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.parsec.eridanus.po.Index">
+        SELECT * FROM tbl_index WHERE id = #{value} AND isEnable = 1
+    </select>
+    <update id="deleteById" parameterType="java.lang.Integer">
+        UPDATE tbl_index SET isEnable = 0 WHERE id = #{value}
+    </update>
+    <insert id="addIndex" parameterType="com.parsec.eridanus.po.Index" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO tbl_index(imageUrl,redirectUrl,isEnable,createTime,updateTime,detail)VALUES (#{imageUrl},#{redirectUrl},#{isEnable},#{createTime},#{updateTime},#{detail})
+    </insert>
+</mapper>

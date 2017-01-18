@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.parsec.eridanus.dao.CategoryDao">
+
+    <select id="findAll" parameterType="java.lang.Integer" resultType="com.parsec.eridanus.po.Category">
+        SELECT * FROM tbl_category c WHERE c.ctype = #{value} and c.isDelete = 1
+    </select>
+    <insert id="add" parameterType="com.parsec.eridanus.po.Category">
+        INSERT INTO tbl_category(cname,ctype,isDelete,createTime)VALUES (#{cname},#{ctype},#{isDelete},#{createTime})
+    </insert>
+    <select id="getById" parameterType="java.lang.Integer" resultType="com.parsec.eridanus.po.Category">
+        SELECT * FROM tbl_category c WHERE c.id = #{value} and c.isDelete = 1
+    </select>
+    <update id="delete" parameterType="java.lang.Integer">
+        UPDATE tbl_category SET isDelete = 0 WHERE id = #{value}
+    </update>
+</mapper>
